@@ -61,7 +61,8 @@ ext {
             mockWebServer :"com.squareup.okhttp3:mockwebserver:4.8.0",
             mockk : "io.mockk:mockk:1.10.0",
             arch: "androidx.arch.core:core-testing:2.1.0",
-            roomTesting: "androidx.room:room-testing:$room_version"
+            roomTesting: "androidx.room:room-testing:$room_version",
+            rxIdler: 'com.squareup.rx.idler:rx2-idler:0.11.0'
     ]
 
 }
