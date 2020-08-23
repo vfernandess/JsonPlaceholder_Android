@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_photoListFragment"
             app:destination="@id/photoListFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_postWithCommentsFragment"
+            app:destination="@id/postWithCommentsFragment" />
     </fragment>
 
     <fragment
@@ -34,4 +37,8 @@
             app:argType="com.voidx.jsonplaceholder.feature.photo.list.model.PhotoDTO"/>
 
     </fragment>
+    <fragment
+        android:id="@+id/postWithCommentsFragment"
+        android:name="com.voidx.jsonplaceholder.feature.post.view.PostWithCommentsFragment"
+        android:label="PostWithCommentsFragment" />
 </navigation>

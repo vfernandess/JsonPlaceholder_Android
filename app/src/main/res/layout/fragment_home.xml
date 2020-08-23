@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Fotos" />
+            android:text="Ver Fotos" />
 
         <TextView
             android:id="@+id/posts"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Posts" />
+            android:text="Ver Post" />
 
     </LinearLayout>
 </layout>
