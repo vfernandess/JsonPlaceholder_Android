@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.voidx.jsonplaceholder.data.util.disposedBy
 import com.voidx.jsonplaceholder.feature.photo.list.domain.PhotoListInteractor
 import com.voidx.jsonplaceholder.feature.photo.list.model.PhotoDTO
+import com.voidx.jsonplaceholder.presentation.LiveEvent
 import com.voidx.jsonplaceholder.presentation.State
 import com.voidx.jsonplaceholder.presentation.ext.appendItems
 import io.reactivex.Scheduler
@@ -17,6 +18,8 @@ class PhotoListViewModel(
     private val mainThreadScheduler: Scheduler
 ) : ViewModel() {
 
+    val onItemClick = LiveEvent<PhotoDTO>()
+
     private val photos = MutableLiveData<MutableList<PhotoDTO>>(mutableListOf())
     private val state = MutableLiveData<State>()
 
@@ -26,6 +29,12 @@ class PhotoListViewModel(
 
     fun photos(): LiveData<List<PhotoDTO>> {
         return photos as? LiveData<List<PhotoDTO>> ?: MutableLiveData(emptyList())
+    }
+
+    fun showDetail(position: Int) {
+        photos.value?.elementAt(position)?.run {
+            onItemClick.postValue(this)
+        }
     }
 
     fun load() {

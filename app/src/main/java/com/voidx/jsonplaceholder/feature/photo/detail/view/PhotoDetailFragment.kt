@@ -8,17 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.voidx.jsonplaceholder.databinding.FragmentPhotoDetailBinding
 import com.voidx.jsonplaceholder.feature.photo.detail.presentation.PhotoDetailViewModel
-import org.koin.androidx.scope.lifecycleScope
-import org.koin.androidx.viewmodel.scope.viewModel
 
 class PhotoDetailFragment : Fragment() {
 
-    private val viewModel: PhotoDetailViewModel by lifecycleScope.viewModel(this)
+    private val viewModel: PhotoDetailViewModel by lazy { PhotoDetailViewModel() }
 
     private val args: PhotoDetailFragmentArgs by navArgs()
 
     private lateinit var binding: FragmentPhotoDetailBinding
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

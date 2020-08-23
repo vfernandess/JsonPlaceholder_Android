@@ -13,6 +13,8 @@ class PhotoAdapter : RecyclerView.Adapter<BindableViewHolder<PhotoItemBinding>>(
 
     private var items: MutableList<PhotoDTO> = mutableListOf()
 
+    var onClick: ((position: Int) -> Unit)? = null
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -27,6 +29,7 @@ class PhotoAdapter : RecyclerView.Adapter<BindableViewHolder<PhotoItemBinding>>(
 
     override fun onBindViewHolder(holder: BindableViewHolder<PhotoItemBinding>, position: Int) {
         holder.viewDataBinding.photo = items[position]
+        holder.onClick = onClick
     }
 
     override fun setData(data: List<PhotoDTO>?) {

@@ -7,21 +7,27 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.voidx.jsonplaceholder.databinding.FragmentPhotoListBinding
+import com.voidx.jsonplaceholder.feature.photo.list.PhotoListCoordinator
 import com.voidx.jsonplaceholder.feature.photo.list.presentation.PhotoListViewModel
 import com.voidx.jsonplaceholder.presentation.State
 import com.voidx.jsonplaceholder.view.widget.recyclerview.EndlessRecyclerViewScrollListener
 import org.koin.androidx.scope.lifecycleScope
 import org.koin.androidx.viewmodel.scope.viewModel
+import org.koin.core.parameter.parametersOf
 
 class PhotoListFragment : Fragment() {
 
     private val viewModel: PhotoListViewModel by lifecycleScope.viewModel(this)
     private val adapter: PhotoAdapter by lifecycleScope.inject()
+    private val coordinator: PhotoListCoordinator by lifecycleScope.inject {
+        parametersOf(findNavController())
+    }
 
     private lateinit var binding: FragmentPhotoListBinding
-    private lateinit var infiteScrollListener: EndlessRecyclerViewScrollListener
+    private lateinit var infiniteScrollListener: EndlessRecyclerViewScrollListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,18 +40,19 @@ class PhotoListFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.list.adapter = adapter
+        adapter.onClick = viewModel::showDetail
 
-        infiteScrollListener = EndlessRecyclerViewScrollListener(
+        infiniteScrollListener = EndlessRecyclerViewScrollListener(
             5,
             EndlessRecyclerViewScrollListener.DIRECTION_BOTTOM,
             binding.list.layoutManager as LinearLayoutManager
         )
 
-        infiteScrollListener.onLoadMore = {
+        infiniteScrollListener.onLoadMore = {
             viewModel.load()
         }
 
-        binding.list.addOnScrollListener(infiteScrollListener)
+        binding.list.addOnScrollListener(infiniteScrollListener)
 
         return binding.root
     }
@@ -62,29 +69,33 @@ class PhotoListFragment : Fragment() {
             }
         }
 
+        viewModel.onItemClick.observe({ lifecycle }) { photo ->
+            coordinator.showDetail(photo)
+        }
+
         viewModel.load()
     }
 
     private fun transitionToErrorState() {
-        infiteScrollListener.loading = false
+        infiniteScrollListener.loading = false
         binding.loading.visibility = GONE
         binding.list.visibility = GONE
     }
 
     private fun transitionToSuccessState() {
-        infiteScrollListener.loading = false
+        infiniteScrollListener.loading = false
         binding.loading.visibility = GONE
         binding.list.visibility = VISIBLE
     }
 
     private fun transitionToEmptyState() {
-        infiteScrollListener.loading = false
+        infiniteScrollListener.loading = false
         binding.loading.visibility = GONE
         binding.list.visibility = GONE
     }
 
     private fun transitionToLoadingState() {
-        infiteScrollListener.loading = true
+        infiniteScrollListener.loading = true
         binding.loading.visibility = VISIBLE
         binding.list.visibility = GONE
     }
