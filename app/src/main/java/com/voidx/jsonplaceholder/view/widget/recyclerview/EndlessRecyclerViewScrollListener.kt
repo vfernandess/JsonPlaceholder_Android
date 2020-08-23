@@ -17,14 +17,22 @@ class EndlessRecyclerViewScrollListener(
     var onLoadMore: (() -> Unit)? = null
     var loading = false
 
+    private var isScrollingEnabled: Boolean = false
+
+    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        super.onScrollStateChanged(recyclerView, newState)
+        isScrollingEnabled = newState != RecyclerView.SCROLL_STATE_IDLE
+    }
+
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         val totalItemCount = layoutManager.itemCount
         val visibleItem = getVisibleItem()
-        if (!loading
-            && totalItemCount > 0
-            && visibleItem > -1
-            && hasToLoadMore(visibleItem, totalItemCount)
+        if (!loading &&
+            totalItemCount > 0 &&
+            visibleItem > -1 &&
+            hasToLoadMore(visibleItem, totalItemCount) &&
+            isScrollingEnabled
         ) {
             onLoadMore?.invoke()
             loading = true
