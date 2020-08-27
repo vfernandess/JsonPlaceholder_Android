@@ -68,8 +68,7 @@ dependencies {
     implementation viewDependencies.recycler
     implementation viewDependencies.lifecycle
     implementation viewDependencies.shimmer
-    implementation viewDependencies.glide
-    kapt viewDependencies.glideCompiler
+    implementation viewDependencies.picasso
 
     implementation dataDependencies.gson
     implementation dataDependencies.retrofit

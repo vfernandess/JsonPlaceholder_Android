@@ -2,8 +2,9 @@ package com.voidx.jsonplaceholder.view.widget.imageview.binding
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.bumptech.glide.Glide
+import com.squareup.picasso.Picasso
 import com.voidx.jsonplaceholder.R
+import com.voidx.jsonplaceholder.view.util.CropCircleTransformation
 
 object BindableImageView {
 
@@ -15,9 +16,10 @@ object BindableImageView {
             return
         }
 
-        Glide
-            .with(imageView)
+        Picasso
+            .get()
             .load(url)
+            .transform(CropCircleTransformation())
             .placeholder(R.drawable.circle_placeholder)
             .into(imageView)
     }
@@ -30,8 +32,8 @@ object BindableImageView {
             return
         }
 
-        Glide
-            .with(imageView)
+        Picasso
+            .get()
             .load(url)
             .placeholder(R.drawable.square_placeholder)
             .into(imageView)
