@@ -7,10 +7,12 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.voidx.jsonplaceholder.databinding.FragmentPhotoListBinding
 import com.voidx.jsonplaceholder.feature.photo.list.PhotoListCoordinator
+import com.voidx.jsonplaceholder.feature.photo.list.model.PhotoDTO
 import com.voidx.jsonplaceholder.feature.photo.list.presentation.PhotoListViewModel
 import com.voidx.jsonplaceholder.presentation.State
 import com.voidx.jsonplaceholder.view.widget.recyclerview.EndlessRecyclerViewScrollListener
@@ -28,6 +30,8 @@ class PhotoListFragment : Fragment() {
 
     private lateinit var binding: FragmentPhotoListBinding
     private lateinit var infiniteScrollListener: EndlessRecyclerViewScrollListener
+
+    val onPhotoClickObserver = Observer<PhotoDTO> { coordinator.showDetail(it) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,11 +73,17 @@ class PhotoListFragment : Fragment() {
             }
         }
 
-        viewModel.onItemClick.observe({ lifecycle }) { photo ->
-            coordinator.showDetail(photo)
-        }
-
         viewModel.load()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onItemClick.observe(this, onPhotoClickObserver)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onItemClick.removeObserver(onPhotoClickObserver)
     }
 
     private fun transitionToErrorState() {
@@ -99,5 +109,4 @@ class PhotoListFragment : Fragment() {
         binding.loading.visibility = VISIBLE
         binding.list.visibility = GONE
     }
-
 }
